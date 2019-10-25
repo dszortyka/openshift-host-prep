@@ -2,18 +2,32 @@
   remote_user: root
   name: "Running cluster playbook"
 
-
+  tasks:
   - name: Download openshift-ansible 3.11
     shell: wget https://github.com/openshift/openshift-ansible/archive/release-3.11.zip
 
-  - name: Copy inventory template to /etc/ansible/hosts
-    shell: cat templates/openshift_inventory_file.template > /etc/ansible/hosts
+  - name: Download ansible-2.8.5-1.el7.noarch.rpm
+    shell: wget https://rpmfind.net/linux/epel/7/x86_64/Packages/a/ansible-2.8.5-1.el7.noarch.rpm
+
+  - name: Install ansible
+    shell: yum install -y ansible-2.8.5-1.el7.noarch.rpm
+
+  #- name: Copy inventory template to /etc/ansible/hosts
+  #  shell: cat templates/openshift_inventory_file.template > /etc/ansible/hosts
+
+  - name: example copying file with owner and permissions
+    copy:
+      src: ../templates/openshift_inventory_file.template
+      dest: /etc/ansible/hosts
+      owner: foo
+      group: foo
+      mode: 0644
 
   - name: Unzip openshift-ansible 3.11 at /root
     shell: unzip release-3.11.zip
 
   - name: Adjust file /root/openshift-ansible-release-3.11/roles/calico/tasks/certs.yml
-    shell: sed -i 's/become: yes$/#become: yes/' /root/openshift-ansible-release-3.11/roles/calico/tasks/certs.yml
+    shell: sed -i 's/  become/  \#become/' /root/openshift-ansible-release-3.11/roles/calico/tasks/certs.yml
 
   - name: Run openshift prerequisites
     shell: ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml
