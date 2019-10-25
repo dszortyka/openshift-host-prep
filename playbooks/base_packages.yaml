@@ -1,0 +1,123 @@
+
+  - name: Define utf-8 codepage
+    shell: printf   'LANG=en_US.utf-8\n
+                    LC_ALL=en_US.utf-8\n' >> /etc/environment
+
+  - name: Install wget
+    yum:
+      name: wget
+      state: latest
+
+  - name: Install git
+    yum:
+      name: git
+      state: latest
+
+  - name: Install net-tools
+    yum:
+      name: net-tools
+      state: latest
+
+  - name: Install bind-utils
+    yum:
+      name: bind-utils
+      state: latest
+
+  - name: Install yum-utils
+    yum:
+      name: yum-utils
+      state: latest
+
+  - name: Install iptables-services
+    yum:
+      name: iptables-services
+      state: latest
+
+  - name: Install bridge-utils
+    yum:
+      name: bridge-utils
+      state: latest
+
+  - name: Install bash-completion
+    yum:
+      name: bash-completion
+      state: latest
+
+  - name: Install bind-utils
+    yum:
+      name: wget
+      state: latest
+
+  - name: Install kexec-tools
+    yum:
+      name: kexec-tools
+      state: latest
+
+  - name: Install psacct
+    yum:
+      name: psacct
+      state: latest
+
+  - name: Install sos
+    yum:
+      name: sos
+      state: latest
+
+  - name: Install device-mapper-persistent-data
+    yum:
+      name: device-mapper-persistent-data
+      state: latest
+
+  - name: Install lvm2
+    yum:
+      name: lvm2
+      state: latest
+
+  - name: Install lsof
+    yum:
+      name: lsof
+      state: latest
+
+    - name: Install telnet
+    yum:
+      name: telnet
+      state: latest
+
+    - name: Install zip
+    yum:
+      name: zip
+      state: latest
+
+    - name: Install unzip
+    yum:
+      name: unzp
+      state: latest
+
+    - name: Install docker
+    yum:
+      name: docker
+      state: latest
+
+    - name: Configure docker options
+      shell:
+        cmd: |
+          tee /etc/containers/registries.conf<<EOF
+          [registries.insecure]
+          registries = [‘172.30.0.0/16’]
+          EOF
+          tee /etc/docker/daemon.json<<EOF
+          {
+           “insecure-registries”: [
+           “172.30.0.0/16”
+           ]
+          }
+          EOF
+
+    - name: Systemctl daemon-reload
+      shell: systemctl daemon-reload
+
+    - name: Systemctl restart docker
+      shell: systemctl restart docker
+
+    - name: Systemctl enable docker
+      shell: systemctl enable docker

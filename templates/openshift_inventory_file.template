@@ -1,0 +1,41 @@
+[OSEv3:children]
+masters
+nodes
+etcd
+
+[OSEv3:vars]
+ansible_ssh_user=root
+ansible_become=true
+ansible_sudo=true
+
+openshift_deployment_type=origin
+openshift_web_console_install=true
+openshift_console_install=true
+openshift_install_examples=true
+
+sdn_network_plugin_name=cni
+openshift_use_dnsmasq=false
+openshift_use_calico=true
+openshift_use_openshift_sdn=false
+
+osm_cluster_network_cidr=192.168.0.0/16
+
+#openshift_additional_repos=[{‘name’: ‘origin-pr’, ‘baseurl’: ‘https://rpms.svc.ci.openshift.org/openshift-origin-v3.11/', ‘enabled’: ‘1’, ‘gpgcheck’: ‘0’},{‘name’: ‘origin-pr-dependencies’, ‘baseurl’: ‘http://mirror.centos.org/centos/7/paas/x86_64/openshift-origin/', ‘enabled’: ‘1’, ‘gpgcheck’: ‘0’}]
+
+openshift_disable_check=docker_storage,disk_availability,memory_availability
+
+openshift_master_identity_providers=[{‘name’: ‘htpasswd_auth’, ‘login’: ‘true’, ‘challenge’: ‘true’, ‘kind’: ‘HTPasswdPasswordIdentityProvider’}]
+
+openshift_docker_insecure_registries=192.168.0.0/16,192.168.10.1/24,172.17.0.0/24,172.30.0.0/16,10.0.0.0/24
+
+
+[masters]
+okd-cluster.home.net openshift_schedulable=true containerized=yes
+
+[etcd]
+okd-cluster.home.net
+
+[nodes]
+okd-cluster.home.net openshift_node_group_name=’node-config-master’
+okd-node1.home.net openshift_node_group_name=’node-config-compute’
+okd-infranode1.home.net openshift_node_group_name=’node-config-infra’
