@@ -3,11 +3,20 @@
   name: "Running cluster playbook"
 
   tasks:
+
+
+tasks:
+  - name: Check if openshift-ansible file exists
+    stat:
+      path: /root/release-3.11.zip
+    register: stat_result
+
   - name: Download openshift-ansible 3.11
     shell: wget https://github.com/openshift/openshift-ansible/archive/release-3.11.zip
+    when: stat_result.stat.exists == False
 
-  - name: Download ansible-2.8.5-1.el7.noarch.rpm
-    shell: wget https://rpmfind.net/linux/epel/7/x86_64/Packages/a/ansible-2.8.5-1.el7.noarch.rpm
+  #- name: Download ansible-2.8.5-1.el7.noarch.rpm
+  #  shell: wget https://rpmfind.net/linux/epel/7/x86_64/Packages/a/ansible-2.8.5-1.el7.noarch.rpm
 
   - name: Install EPEL repo
     yum:
