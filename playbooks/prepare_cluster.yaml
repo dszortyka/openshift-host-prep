@@ -1,0 +1,19 @@
+- hosts: cluster
+  remote_user: root
+  name: "Running cluster playbook"
+
+
+  - name: Download openshift-ansible 3.11
+    shell: wget https://github.com/openshift/openshift-ansible/archive/release-3.11.zip
+
+  - name: Copy inventory template to /etc/ansible/hosts
+    shell: cat templates/openshift_inventory_file.template > /etc/ansible/hosts
+
+  - name: Unzip openshift-ansible 3.11 at /root
+    shell: unzip release-3.11.zip
+
+  - name: Adjust file /root/openshift-ansible-release-3.11/roles/calico/tasks/certs.yml
+    shell: sed -i 's/become: yes$/#become: yes/' /root/openshift-ansible-release-3.11/roles/calico/tasks/certs.yml
+
+  - name: Run openshift prerequisites
+    shell: ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml

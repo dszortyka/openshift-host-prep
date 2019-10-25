@@ -8,7 +8,7 @@ Contains the base packages and other configurations required by the cluster or n
 - playbooks/prepare_hosts.yaml
 Contains the main logic and instructions to prepare the nodes defined in inventory file
 
-- playbooks/prepare_master.yaml
+- playbooks/prepare_cluster.yaml
 Contains the instructions to prepare master server and required packages
 
 - hosts.yaml
