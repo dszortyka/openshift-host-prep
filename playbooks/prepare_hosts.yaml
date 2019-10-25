@@ -1,5 +1,17 @@
 - hosts: cluster
   remote_user: root
+  name: "Applying base packages to Cluster Server"
+  # include: vars.yaml
+  #vars:
+  #  apiserver_advertise_address: '10.0.0.98'
+  #  pod_network_cidr: '192.168.0.0/16'
+
+  tasks:
+    - include: base_packages.yaml
+
+- hosts: nodes
+  name: "Applying base packages to Node Servers"
+  remote_user: root
   # include: vars.yaml
   #vars:
   #  apiserver_advertise_address: '10.0.0.98'
