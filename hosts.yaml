@@ -1,6 +1,0 @@
-[cluster]
-okd-cluster.home.net
-
-[nodes]
-okd-node1.home.net
-okd-infranode1.home.net
