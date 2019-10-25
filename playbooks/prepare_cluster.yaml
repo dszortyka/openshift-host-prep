@@ -9,8 +9,11 @@
   - name: Download ansible-2.8.5-1.el7.noarch.rpm
     shell: wget https://rpmfind.net/linux/epel/7/x86_64/Packages/a/ansible-2.8.5-1.el7.noarch.rpm
 
+  - name: Install EPEL repo
+    shell: yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
   - name: Install ansible
-    shell: yum install -y ansible-2.8.5-1.el7.noarch.rpm
+    shell: yum install -y ansible
 
   #- name: Copy inventory template to /etc/ansible/hosts
   #  shell: cat templates/openshift_inventory_file.template > /etc/ansible/hosts
@@ -30,4 +33,4 @@
     shell: sed -i 's/  become/  \#become/' /root/openshift-ansible-release-3.11/roles/calico/tasks/certs.yml
 
   - name: Run openshift prerequisites
-    shell: ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml
+    shell: ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.ymle
