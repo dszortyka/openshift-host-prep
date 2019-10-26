@@ -4,8 +4,6 @@
 
   tasks:
 
-
-tasks:
   - name: Check if openshift-ansible file exists
     stat:
       path: /root/release-3.11.zip
@@ -44,5 +42,12 @@ tasks:
   - name: Adjust file /root/openshift-ansible-release-3.11/roles/calico/tasks/certs.yml
     shell: sed -i 's/  become/  \#become/' /root/openshift-ansible-release-3.11/roles/calico/tasks/certs.yml
 
-  - name: Run openshift prerequisites
-    shell: ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml
+  #- name: Run openshift prerequisites
+  #  shell: ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml
+
+  - debug:
+    msg:
+      - "OpenShift packages required by the Cluster Server are now installed."
+      - "You may run the prerequisites file and then the deploy cluster file:"
+      - "ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml"
+      - "ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/deploy_cluster.yaml"
