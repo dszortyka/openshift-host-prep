@@ -25,7 +25,7 @@ Inventory file where the hosts and main variables are defined
 It will install and configure base packages<br>
 --- playbooks/prepare_cluster.yaml<br>
 Once base packages are installed, you may run this script to download and install cluster packages.<br>
-File "/etc/ansible/hosts" will be created in the cluster server.
+File "/etc/ansible/hosts" will be created in the cluster server based on templates file (templates/openshift_inventory_file.template).
 
 
 Once this is done. You can move forward deploying openshift by running prerequisites and deploy files, from inside your Cluster Server.
