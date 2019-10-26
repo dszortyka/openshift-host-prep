@@ -46,8 +46,9 @@
   #  shell: ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml
 
   - debug:
-    msg:
+      msg:
       - "OpenShift packages required by the Cluster Server are now installed."
       - "You may run the prerequisites file and then the deploy cluster file:"
-      - "ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml"
-      - "ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/deploy_cluster.yaml"
+      - "From inside the cluster server:"
+      - "  ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml"
+      - "  ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/deploy_cluster.yml"
