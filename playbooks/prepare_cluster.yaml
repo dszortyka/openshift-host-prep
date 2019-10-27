@@ -28,7 +28,7 @@
   #- name: Copy inventory template to /etc/ansible/hosts
   #  shell: cat templates/openshift_inventory_file.template > /etc/ansible/hosts
 
-  - name: example copying file with owner and permissions
+  - name: Copy Template Inventory file to /etc/ansible/hosts on cluster server
     copy:
       src: ../templates/openshift_inventory_file.template
       dest: /etc/ansible/hosts
@@ -38,9 +38,23 @@
 
   - name: Unzip openshift-ansible 3.11 at /root
     shell: unzip release-3.11.zip
+    when: stat_result.stat.exists == False
 
   - name: Adjust file /root/openshift-ansible-release-3.11/roles/calico/tasks/certs.yml
     shell: sed -i 's/  become/  \#become/' /root/openshift-ansible-release-3.11/roles/calico/tasks/certs.yml
+
+  - name: Generate SSH Keys
+    openssh_keypair:
+      path: /root/.ssh/id_rsa
+      size: 2048
+      force: true
+
+  - name: Get SSH Key from Cluster to share between hosts
+    shell: cat /root/.ssh/id_rsa.pub
+    register: id_rsa_cluster
+  
+  - debug:
+      msg: "{{ id_rsa_cluster }}"
 
   #- name: Run openshift prerequisites
   #  shell: ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml
@@ -52,3 +66,32 @@
       - "From inside the cluster server:"
       - "  ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml"
       - "  ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/deploy_cluster.yml"
+
+- hosts: cluster
+  remote_user: root
+
+  tasks:
+  - name: Configure authorized keys for cluster and node servers
+    shell:
+      cmd: |
+        echo "{{ id_rsa_cluster.stdout }}" >> /root/.ssh/authorized_keys
+
+  #- name: Fetch id rsa key generated at cluster server
+  #  fetch:
+  #    src: /root/.ssh/id_rsa.pub
+  #    dest: /tmp/tempid_rsa.pub
+  #    flat: yes
+
+#- hosts: cluster
+#  remote_user: root
+
+#  tasks:
+
+#  - name: Fetch temp file to dest servers
+#    fetch:
+#      src: /tmp/tempid_rsa.pub
+#      dest: /root/.ssh/tempid_rsa.pub
+#      flat: yes
+
+#  - name: Copy public key to authorized keys on each host
+#    shell: cat /root/.ssh/tempid_rsa.pub >> /root/.ssh/authorized_keys

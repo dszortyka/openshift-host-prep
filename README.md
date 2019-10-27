@@ -11,8 +11,12 @@ Contains the main logic and instructions to prepare the nodes defined in invento
 - playbooks/prepare_cluster.yaml<br>
 Contains the instructions to prepare master server and required packages
 
-- hosts.yaml<br>
-Inventory file where the hosts and main variables are defined
+- local_hosts_inventory.yaml
+This is the file where you configure your local VMs, where the openshift packages should be donwloaded and installed.
+
+- templates/openshift_inventory_file.template<br>
+This is the inventory file that will be used as template for /etc/ansible/hosts in the cluster server. This file will be created once prepare_cluster.yaml is executed.
+
 
 
 # How to run the scripts (from your local computer)
