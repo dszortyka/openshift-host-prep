@@ -52,12 +52,10 @@
   - name: Get SSH Key from Cluster to share between hosts
     shell: cat /root/.ssh/id_rsa.pub
     register: id_rsa_cluster
+  - set_fact: id_rsa_cluster_var="{{ id_rsa_cluster.stdout }}"
   
-  - debug:
-      msg: "{{ id_rsa_cluster }}"
-
-  #- name: Run openshift prerequisites
-  #  shell: ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml
+  #- debug:
+  #    msg: "{{ id_rsa_cluster_var }}"
 
   - debug:
       msg:
@@ -67,14 +65,22 @@
       - "  ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/prerequisites.yml"
       - "  ansible-playbook -i /etc/ansible/hosts /root/openshift-ansible-release-3.11/playbooks/deploy_cluster.yml"
 
-- hosts: cluster
+
+- hosts: all
   remote_user: root
+  name: Configure each host to receive id_rsa.pub key from cluster server to all servers defined in the inventory file
 
   tasks:
+
+  - name: test echo id_rsa_cluster_var
+    debug:
+      msg: "{{ hostvars['okd-cluster.home.net']['id_rsa_cluster_var'] }}"
+    register: id_rsa_cluster_value
+
   - name: Configure authorized keys for cluster and node servers
     shell:
       cmd: |
-        echo "{{ id_rsa_cluster.stdout }}" >> /root/.ssh/authorized_keys
+        echo "{{ hostvars['okd-cluster.home.net']['id_rsa_cluster_var'] }}" >> /root/.ssh/authorized_keys
 
   #- name: Fetch id rsa key generated at cluster server
   #  fetch:
