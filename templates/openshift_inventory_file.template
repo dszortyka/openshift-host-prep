@@ -13,6 +13,8 @@ openshift_web_console_install=true
 openshift_console_install=true
 openshift_install_examples=true
 
+openshift_enable_service_catalog=false
+
 sdn_network_plugin_name=cni
 openshift_use_dnsmasq=false
 openshift_use_calico=true
